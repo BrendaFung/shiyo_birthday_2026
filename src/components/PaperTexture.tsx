@@ -1,0 +1,1 @@
+export function PaperTexture(){return <div className="paper-texture" aria-hidden="true"><span className="spark s1">✦</span><span className="spark s2">✧</span><span className="spark s3">·</span><span className="ribbon r1"/><span className="ribbon r2"/></div>}

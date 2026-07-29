@@ -1,0 +1,9 @@
+export type CharacterBlessing = { characterId: string; characterName: string; firstRoundBlessings: string[]; secondRoundBlessings: string[] };
+export const characterBlessings: CharacterBlessing[] = [
+  { characterId: 'bokuto', characterName: '木兔', firstRoundBlessings: ['生日快樂！既然今天是你的大日子，那就准許你今天跟我一樣帥氣吧！哈哈哈！', 'HEY HEY HEY！把今天的快樂全部收下吧！', 'HEY HEY HEY！生日快樂！今天你就是最耀眼的主角，拿出 100% 的狀態，跟著我一起衝向巔峰吧！'], secondRoundBlessings: ['好運扣球成功！接下來也要一直閃閃發光！', '生日能量滿格，接下來每一步都超順利！', '生日快樂……赤葦說今天是你的大日子，要我不能搞砸，但我現在好像連蛋糕上的蠟燭都吹不熄了啦……（望向赤葦）'] },
+  { characterId: 'kuroo', characterName: '黑尾', firstRoundBlessings: ['生日快樂。接下來一年，也把好運牢牢接住吧。', '今天運氣不錯嘛，祝你每個願望都順利落地。', '新的篇章開始了，記得把開心放在第一位。', '生日快樂！今天就由你來當『心臟』吧，讓血液流動起來，帶給身體充足的氧氣——簡而言之！'], secondRoundBlessings: ['又被你抽到了。看來好運很懂得挑人嘛。', '這份驚喜先收好，之後還有更多好事。', '下一局也會贏的，生日主角可不能輸。'] },
+  { characterId: 'bakugo', characterName: '爆豪', firstRoundBlessings: ['生日就給我痛快地開心一整天！今年也一路贏到底！', '新的一歲拿出全力，把想做的事全部做到！', '驚喜收下，接下來每一步都給我漂亮地成功！', '今天是你的日子，開心和好運一個都不准少！'], secondRoundBlessings: ['又抽中了？很好，這股運氣給我繼續保持！', '把這份好運握緊，接下來也要一路衝到底！', '生日加成還沒結束，後面一定還有好事！', '生日快樂！既然是老子認可的傢伙，新的一歲就給我變得更強一點，聽到沒有？！'] },
+  { characterId: 'todoroki', characterName: '轟', firstRoundBlessings: ['生日快樂。希望新的一年，想做的事都能順利完成。', '願你每天都遇見剛剛好的溫柔與好運。',  '離你的生日還有一段時間，不過想到就先說了。生日快樂，希望今年也能過得很好。'], secondRoundBlessings: ['這份驚喜送給你。願接下來的日子安穩順心。', '好運又來了。希望你今天和以後都能安心開心。', '正式生日那天再說一次也沒關係，不過這句祝福，我想先送給你。生日快樂。', '生日的光會一直在，陪你走過新的篇章。'] },
+  { characterId: 'usagi', characterName: '烏薩琪', firstRoundBlessings: ['呀哈～生日快樂！好運和驚喜全部飛過來吧！', '啾咪！新的一歲每天都要甜甜地開心喔！', '生日蛋糕分你一大口，願望也全部亮晶晶！', '蹦蹦跳跳送祝福，願你的每一天都超幸運！'], secondRoundBlessings: ['又見面啦～這份小驚喜也要抱緊緊！', '好運兔兔到！今天開始願望都排隊實現！', '呀哈～再加一點可愛能量，陪你走好今年！', '把幸福裝進口袋，接下來每天都暖呼呼！'] },
+  { characterId: 'oikawa', characterName: '及川', firstRoundBlessings: ['距離生日還有一個月？沒辦法，像我這麼貼心的人，祝福當然也要搶第一。生日快樂！', '怕大家生日當天都搶著祝福你，所以及川大人決定先卡位啦！提前祝你生日快樂，要一直開心哦。'], secondRoundBlessings: ['再補上一顆生日星星，願你的願望慢慢成真。', '生日還沒到？那正好，我可以獨占今天的祝福。', '怕生日當天太多人祝福你，所以我先來啦！提前祝你生日快樂，今年也要笑得像贏球一樣開心。'] },
+];

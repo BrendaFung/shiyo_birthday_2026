@@ -1,0 +1,2 @@
+.card-page .letter{width:min(100%,360px);padding-inline:20px}.card-page .letter p{font-size:clamp(11px,3vw,13px);letter-spacing:-.035em;white-space:nowrap;line-height:1.6;margin-inline:auto}.card-page .letter-stamp{margin-top:auto}
+@media(max-width:340px){.card-page .letter p{font-size:11px;letter-spacing:-.06em}}

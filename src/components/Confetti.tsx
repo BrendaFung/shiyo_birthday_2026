@@ -1,0 +1,2 @@
+import confetti from 'canvas-confetti'; import {useEffect} from 'react';
+export function Confetti(){useEffect(()=>{const end=Date.now()+3500;const colors=['#f47f6b','#f2c66d','#8cc8bb','#b7a1d8','#f6a8b8'];const frame=()=>{confetti({particleCount:5,angle:60,spread:65,origin:{x:0},colors});confetti({particleCount:5,angle:120,spread:65,origin:{x:1},colors});if(Date.now()<end)requestAnimationFrame(frame)};frame();return()=>{confetti.reset()}},[]);return null;}

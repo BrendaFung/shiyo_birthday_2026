@@ -1,0 +1,2 @@
+.brand img{width:72px;height:58px}.static-mascot{position:relative!important;top:auto!important;right:auto!important;width:88px;height:82px;margin:-4px 0 10px auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}.static-mascot img{width:86px;height:70px}.static-mascot span{margin-top:-1px}.game-intro{margin-bottom:16px}
+@media(max-width:380px){.brand img{width:64px;height:54px}.static-mascot{width:76px;height:72px;margin-top:0;margin-bottom:8px}.static-mascot img{width:74px;height:60px}.game-intro{margin-bottom:12px}}

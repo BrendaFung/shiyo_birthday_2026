@@ -1,0 +1,2 @@
+import type { Character } from '../types'; import { imageMap } from '../config/imageMap';
+export function Header({ music, onMusic }: { count: number; characters: Character[]; music: boolean; onMusic: () => void }) { return <header><div className="brand"><img src={imageMap.usagiAnimated} alt="烏薩琪動態生日插畫"/><div><strong>SHIYO 的生日禮物</strong><small>birthday surprise</small></div></div><div className="header-right"><button className="sound-button" onClick={onMusic} aria-label="切換音效">{music ? '♫' : '♪'}</button></div></header>; }
