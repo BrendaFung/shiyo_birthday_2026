@@ -24,7 +24,9 @@ type AudioController = {
 
 export function useSound(enabled = false): AudioController {
   useEffect(() => {
-    if (enabled) initAudio();
+    initAudio();
+    // `music` is the persisted mute flag in the existing game state.
+    setMuted(enabled);
   }, [enabled]);
 
   return {

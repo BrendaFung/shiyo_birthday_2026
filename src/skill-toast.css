@@ -1,1 +1,52 @@
-.skill-toast{position:fixed;z-index:90;left:50%;bottom:28px;transform:translateX(-50%);width:min(84vw,300px);padding:14px 16px;border:1px solid #e4b76d;border-radius:18px;background:#fff8e9;text-align:center;box-shadow:0 12px 30px #6e4a2d33}.skill-toast span,.skill-toast strong,.skill-toast small{display:block}.skill-toast span{font-size:9px;letter-spacing:.16em;color:#bd925a}.skill-toast strong{font-size:17px;color:#e97868;margin:5px 0}.skill-toast small{font-size:12px;line-height:1.5;color:#765f54}
+.skill-toast {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  box-sizing: border-box;
+  width: min(86vw, 360px);
+  height: fit-content;
+  max-height: min(46dvh, 320px);
+  margin: auto;
+  padding: 18px 18px 20px;
+  border: 1px solid #e4b76d;
+  border-radius: 20px;
+  background: #fff8e9;
+  text-align: center;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  box-shadow: 0 12px 30px #6e4a2d33;
+}
+
+.skill-toast span,
+.skill-toast strong,
+.skill-toast small {
+  display: block;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.skill-toast span {
+  font-size: 9px;
+  letter-spacing: .16em;
+  color: #bd925a;
+}
+
+.skill-toast strong {
+  margin: 6px 0;
+  color: #e97868;
+  font-size: clamp(18px, 5vw, 24px);
+  line-height: 1.3;
+}
+
+.skill-toast small {
+  color: #765f54;
+  font-size: clamp(14px, 3.8vw, 16px);
+  line-height: 1.7;
+}
+
+@media (max-height: 620px) {
+  .skill-toast {
+    max-height: 54dvh;
+    padding-block: 14px;
+  }
+}

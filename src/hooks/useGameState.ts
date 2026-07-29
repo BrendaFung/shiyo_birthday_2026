@@ -25,6 +25,7 @@ const fresh = (phase: Phase = 'opening'): SaveState => {
     skillQueue: [],
     skillInProgress: false,
     firstAwakeningTriggered: false,
+    twiceThresholdSkillCount: 0,
   };
 };
 
@@ -65,6 +66,7 @@ export function useGameState() {
     const queued = [...current.skillQueue];
     const triggered = [...current.triggeredSkills];
     let firstAwakeningTriggered = current.firstAwakeningTriggered;
+    let twiceThresholdSkillCount = current.twiceThresholdSkillCount ?? 0;
 
     const queueCharacterSkill = (id: string) => {
       const skillId = `${id}-skill`;
@@ -89,8 +91,8 @@ export function useGameState() {
     // Rule 3: when every character has appeared twice, trigger the character
     // on this card if it is still available. This is the last character rule.
     const everyoneAppearedTwice = fixedFirstRoundCharacterIds.every((id) => (counts[id] ?? 0) >= 2);
-    if (everyoneAppearedTwice) {
-      queueCharacterSkill(characterId);
+    if (everyoneAppearedTwice && twiceThresholdSkillCount < 3) {
+      if (queueCharacterSkill(characterId)) twiceThresholdSkillCount += 1;
     }
 
     save({
@@ -101,6 +103,7 @@ export function useGameState() {
       skillQueue: queued,
       triggeredSkills: triggered,
       firstAwakeningTriggered,
+      twiceThresholdSkillCount,
     });
     return prizeId;
   };
