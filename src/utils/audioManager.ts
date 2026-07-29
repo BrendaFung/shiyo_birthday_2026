@@ -64,6 +64,7 @@ export async function unlockAudio() {
 
 export function playSound(name: SoundName, options: PlayOptions = {}) {
   if (!initialized) initAudio();
+  Howler.mute(getMuted());
   const sourceIndex = allSources.findIndex((source) => source === name);
   if (sourceIndex < 0) return;
   const source = allSources[sourceIndex];

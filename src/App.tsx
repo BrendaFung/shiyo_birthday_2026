@@ -5,7 +5,7 @@ import { Game } from './components/Game';
 import { Complete } from './components/Complete';
 import { useGameState } from './hooks/useGameState';
 import { useSound } from './hooks/useSound';
-import { characters, getCharacterSkill, getRoundForPrize } from './config/gameConfig';
+import { characters, getCharacterSkill, getRoundForPrize, getSkillAutoRevealCount } from './config/gameConfig';
 import { getPrizeSoundType } from './config/prizeSoundConfig';
 import type { Character } from './types';
 import prizes from './data/prizes.json';
@@ -103,7 +103,7 @@ export default function App() {
         sound.skillAlert();
         await wait(120);
         sound.skill(trigger.characterId);
-        for (let index = 0; index < skill.autoRevealCount; index += 1) {
+        for (let index = 0; index < getSkillAutoRevealCount(skill); index += 1) {
           await wait(720);
           const cell = game.randomUnopenedCell();
           if (cell === null) break;
@@ -160,7 +160,7 @@ export default function App() {
   };
 
   if (game.state.phase === 'opening') return <Opening onStart={() => { sound.click(); game.setPhase('card'); }} />;
-  if (game.state.phase === 'card') return <CardIntro onStart={() => { sound.click(); game.restart(); }} />;
+  if (game.state.phase === 'card') return <CardIntro onStart={() => { sound.setMuted(false); sound.click(); game.restart(); }} />;
   if (game.state.phase === 'complete') return <Complete prizes={prizes} onRestart={restartToHome} />;
 
   const toggleAudio = () => {

@@ -26,6 +26,10 @@ const fresh = (phase: Phase = 'opening'): SaveState => {
     skillInProgress: false,
     firstAwakeningTriggered: false,
     twiceThresholdSkillCount: 0,
+    skillActivationCounts: Object.fromEntries(fixedFirstRoundCharacterIds.map((id) => [id, 0])),
+    protectedSkillCharacters: [],
+    specialSkill12Triggered: false,
+    specialSkill26Triggered: false,
   };
 };
 
@@ -67,23 +71,37 @@ export function useGameState() {
     const triggered = [...current.triggeredSkills];
     let firstAwakeningTriggered = current.firstAwakeningTriggered;
     let twiceThresholdSkillCount = current.twiceThresholdSkillCount ?? 0;
+    const skillActivationCounts = { ...(current.skillActivationCounts ?? {}) };
+    const protectedSkillCharacters = [...(current.protectedSkillCharacters ?? [])];
+    let specialSkill12Triggered = current.specialSkill12Triggered ?? false;
+    let specialSkill26Triggered = current.specialSkill26Triggered ?? false;
 
-    const queueCharacterSkill = (id: string) => {
+    const queueCharacterSkill = (id: string, allowRepeat = false, protect = false) => {
       const skillId = `${id}-skill`;
-      if (triggered.includes(skillId)) return false;
-      queued.push({ characterId: id, skillId });
-      triggered.push(skillId);
+      const activationCount = skillActivationCounts[id] ?? 0;
+      const maxActivations = allowRepeat ? 2 : 1;
+      if (activationCount >= maxActivations) return false;
+      if (!allowRepeat && triggered.includes(skillId)) return false;
+      if (allowRepeat && protectedSkillCharacters.includes(id)) return false;
+      queued.push({ characterId: id, skillId, allowRepeat });
+      skillActivationCounts[id] = activationCount + 1;
+      if (!triggered.includes(skillId)) triggered.push(skillId);
+      if (protect && !protectedSkillCharacters.includes(id)) protectedSkillCharacters.push(id);
       return true;
     };
 
     // Rule 1: the first character to appear three times awakens.
     if (!firstAwakeningTriggered && counts[characterId] >= firstAwakeningThreshold) {
-      if (queueCharacterSkill(characterId)) firstAwakeningTriggered = true;
+      if (queueCharacterSkill(characterId, false, true)) firstAwakeningTriggered = true;
     }
 
     // Rule 2: from the 40th opened card onward, use the first character
     // whose skill has not already been triggered.
     const openedCount = current.opened.length + 1;
+    // Rule 4: the character on the fourth opened card gets a skill if available.
+    if (openedCount === 4) {
+      queueCharacterSkill(characterId, false, true);
+    }
     if (openedCount >= 40) {
       queueCharacterSkill(characterId);
     }
@@ -91,8 +109,22 @@ export function useGameState() {
     // Rule 3: when every character has appeared twice, trigger the character
     // on this card if it is still available. This is the last character rule.
     const everyoneAppearedTwice = fixedFirstRoundCharacterIds.every((id) => (counts[id] ?? 0) >= 2);
-    if (everyoneAppearedTwice && twiceThresholdSkillCount < 3) {
-      if (queueCharacterSkill(characterId)) twiceThresholdSkillCount += 1;
+    if (everyoneAppearedTwice && twiceThresholdSkillCount < 2) {
+      if (queueCharacterSkill(characterId, true)) twiceThresholdSkillCount += 1;
+    }
+
+    // If the first 11 cards only awakened one unique character, the 12th
+    // card gets a repeatable skill activation (unless protected by rules 1/4).
+    if (openedCount === 12 && triggered.length === 1 && !specialSkill12Triggered) {
+      queueCharacterSkill(characterId, true);
+      specialSkill12Triggered = true;
+    }
+
+    // If the first 25 cards only awakened three unique characters, the 26th
+    // card gets a repeatable skill activation (unless protected by rules 1/4).
+    if (openedCount === 26 && triggered.length === 3 && !specialSkill26Triggered) {
+      queueCharacterSkill(characterId, true);
+      specialSkill26Triggered = true;
     }
 
     save({
@@ -104,6 +136,10 @@ export function useGameState() {
       triggeredSkills: triggered,
       firstAwakeningTriggered,
       twiceThresholdSkillCount,
+      skillActivationCounts,
+      protectedSkillCharacters,
+      specialSkill12Triggered,
+      specialSkill26Triggered,
     });
     return prizeId;
   };
