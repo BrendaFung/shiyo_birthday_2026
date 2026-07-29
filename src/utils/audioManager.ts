@@ -7,6 +7,7 @@ const MUTED_KEY = 'shiyo_audio_muted';
 const sounds = new Map<SoundName, Howl>();
 let initialized = false;
 let muted = false;
+let audioUnlocked = false;
 
 const allSources = Object.values(SOUND_CONFIG).flatMap((group) => Object.values(group));
 
@@ -38,6 +39,27 @@ export function preloadAudio() {
   Object.entries(SOUND_CONFIG).forEach(([groupName, group]) => {
     Object.entries(group).forEach(([soundName, source]) => getHowl(`${groupName}.${soundName}`, source));
   });
+}
+
+export async function unlockAudio() {
+  if (audioUnlocked) return true;
+  try {
+    const audio = new Audio('/audio/ui-click.wav');
+    audio.preload = 'auto';
+    audio.muted = true;
+    audio.volume = 0;
+    const playPromise = audio.play();
+    if (playPromise) await playPromise;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.muted = false;
+    audio.volume = 1;
+    audioUnlocked = true;
+    return true;
+  } catch (error) {
+    console.warn('[audio] Safari unlock failed', error);
+    return false;
+  }
 }
 
 export function playSound(name: SoundName, options: PlayOptions = {}) {
@@ -97,4 +119,15 @@ export function getMuted() {
 
 export function isAudioInitialized() {
   return initialized;
+}
+
+export function getAudioDebugInfo() {
+  return {
+    initialized,
+    unlocked: audioUnlocked,
+    muted: getMuted(),
+    userAgent: typeof navigator === 'undefined' ? 'unknown' : navigator.userAgent,
+    audioFilesLoaded: sounds.size,
+    failedAudioFiles: [],
+  };
 }

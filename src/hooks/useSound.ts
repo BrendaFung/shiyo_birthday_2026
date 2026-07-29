@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import {
   initAudio,
+  unlockAudio,
   playChainSound,
   playCharacterSkillSound,
   playPrizeSound,
@@ -30,8 +31,8 @@ export function useSound(enabled = false): AudioController {
   }, [enabled]);
 
   return {
-    click: () => playSound(SOUND_CONFIG.ui.click, { volume: VOLUME_CONFIG.click }),
-    paper: () => playSound(SOUND_CONFIG.ui.flip, { volume: VOLUME_CONFIG.flip }),
+    click: () => { void unlockAudio(); playSound(SOUND_CONFIG.ui.click, { volume: VOLUME_CONFIG.click }); },
+    paper: () => { void unlockAudio(); playSound(SOUND_CONFIG.ui.flip, { volume: VOLUME_CONFIG.flip }); },
     modalOpen: () => playSound(SOUND_CONFIG.ui.modalOpen, { volume: VOLUME_CONFIG.modal }),
     modalClose: () => playSound(SOUND_CONFIG.ui.modalClose, { volume: VOLUME_CONFIG.modal }),
     prize: (soundType = 'default') => playPrizeSound(soundType),
