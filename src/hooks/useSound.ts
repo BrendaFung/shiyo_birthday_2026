@@ -1,9 +1,42 @@
-import { useEffect, useRef } from 'react';
-import { Howl } from 'howler';
+import { useEffect } from 'react';
+import {
+  initAudio,
+  playChainSound,
+  playCharacterSkillSound,
+  playPrizeSound,
+  playSound,
+  setMuted,
+} from '../utils/audioManager';
+import { SOUND_CONFIG, VOLUME_CONFIG, type PrizeSoundType } from '../config/soundConfig';
 
-const silentHowlSource = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
-type AudioController = { click: () => void; paper: () => void; win: () => void };
+type AudioController = {
+  click: () => void;
+  paper: () => void;
+  modalOpen: () => void;
+  modalClose: () => void;
+  prize: (soundType?: PrizeSoundType) => void;
+  skill: (characterId: string) => void;
+  skillAlert: () => void;
+  chain: (count: number) => void;
+  win: () => void;
+  setMuted: (value: boolean) => void;
+};
 
-function tone(frequency: number, duration: number, volume: number) { const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext; if (!AudioContextClass) return; const context = new AudioContextClass(); const oscillator = context.createOscillator(); const gain = context.createGain(); oscillator.type = 'sine'; oscillator.frequency.value = frequency; gain.gain.setValueAtTime(0.0001, context.currentTime); gain.gain.exponentialRampToValueAtTime(volume, context.currentTime + .02); gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration); oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + duration + .04); window.setTimeout(() => context.close().catch(() => undefined), (duration + .2) * 1000); }
+export function useSound(enabled = false): AudioController {
+  useEffect(() => {
+    if (enabled) initAudio();
+  }, [enabled]);
 
-export function useSound(enabled = false): AudioController { const musicTimer = useRef<number | null>(null); useEffect(() => { if (!enabled) return undefined; const playAmbient = () => { tone(261.63, .65, .018); window.setTimeout(() => tone(329.63, .7, .014), 180); }; playAmbient(); musicTimer.current = window.setInterval(playAmbient, 2800); return () => { if (musicTimer.current) window.clearInterval(musicTimer.current); musicTimer.current = null; }; }, [enabled]); return { click: () => { new Howl({ src: [silentHowlSource], volume: 0 }).play(); tone(660, .12, .08); }, paper: () => tone(420, .16, .045), win: () => { tone(523.25, .3, .08); window.setTimeout(() => tone(659.25, .35, .07), 110); window.setTimeout(() => tone(783.99, .5, .06), 230); } }; }
+  return {
+    click: () => playSound(SOUND_CONFIG.ui.click, { volume: VOLUME_CONFIG.click }),
+    paper: () => playSound(SOUND_CONFIG.ui.flip, { volume: VOLUME_CONFIG.flip }),
+    modalOpen: () => playSound(SOUND_CONFIG.ui.modalOpen, { volume: VOLUME_CONFIG.modal }),
+    modalClose: () => playSound(SOUND_CONFIG.ui.modalClose, { volume: VOLUME_CONFIG.modal }),
+    prize: (soundType = 'default') => playPrizeSound(soundType),
+    skill: (characterId) => playCharacterSkillSound(characterId),
+    skillAlert: () => playSound(SOUND_CONFIG.ui.skillAlert, { volume: VOLUME_CONFIG.skill }),
+    chain: (count) => playChainSound(count),
+    win: () => playSound(SOUND_CONFIG.ui.gameComplete, { volume: VOLUME_CONFIG.complete }),
+    setMuted,
+  };
+}

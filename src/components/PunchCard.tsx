@@ -1,2 +1,25 @@
 import { AnimatePresence, motion } from 'framer-motion';
-export function PunchCard({ order, opened, onOpen, disabled }: { order: number[]; opened: number[]; onOpen: (index: number) => void; disabled: boolean }) { return <div className="punch-card">{order.map((prizeId, index) => { const isOpen = opened.includes(index); return <motion.button key={`${index}-${prizeId}`} className={`punch-cell ${isOpen ? 'is-open' : ''}`} onClick={() => onOpen(index)} disabled={isOpen || disabled} whileTap={!isOpen && !disabled ? { scale: .88, rotate: 3 } : undefined} aria-label={isOpen ? `第 ${index + 1} 格已打開` : `打開第 ${index + 1} 格`}><AnimatePresence mode="wait">{isOpen ? <motion.span key="open" initial={{ scale: 0, rotate: -30 }} animate={{ scale: 1, rotate: 0 }}>✦</motion.span> : <motion.span key="closed">{String(index + 1).padStart(2, '0')}</motion.span>}</AnimatePresence>{isOpen && <i/>}</motion.button>; })}</div>; }
+
+export function PunchCard({ order, opened, onOpen, disabled }: { order: number[]; opened: number[]; onOpen: (index: number) => void; disabled: boolean }) {
+  return <div className="punch-card">
+    {order.map((prizeId, index) => {
+      const isOpen = opened.includes(index);
+      return <motion.button
+        data-cell-index={index}
+        key={`${index}-${prizeId}`}
+        className={`punch-cell ${isOpen ? 'is-open' : ''}`}
+        onClick={() => onOpen(index)}
+        disabled={isOpen || disabled}
+        whileTap={!isOpen && !disabled ? { scale: .88, rotate: 3 } : undefined}
+        aria-label={isOpen ? `第${index + 1}格已翻開` : `翻開第${index + 1}格`}
+      >
+        <AnimatePresence mode="wait">
+          {isOpen
+            ? <motion.span key="open" initial={{ scale: 0, rotate: -30 }} animate={{ scale: 1, rotate: 0 }}>✓</motion.span>
+            : <motion.span key="closed">{String(index + 1).padStart(2, '0')}</motion.span>}
+        </AnimatePresence>
+        {isOpen && <i />}
+      </motion.button>;
+    })}
+  </div>;
+}
